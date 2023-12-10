@@ -1,43 +1,32 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const express = require("express");
-const Product = require("./models/product");
+const path = require("path");
+const cors = require("cors");
+const errorMiddleware = require("./utils/error");
 const app = express();
+
+const productRoutes = require("./routes/productsRouter");
+
 dotenv.config({ path: "./config.env" });
 
+app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname + "/public")));
+app.use(
+  "/products/images",
+  express.static(path.join(__dirname, "public", "images"))
+);
+app.use("/products/css", express.static(path.join(__dirname, "public", "css")));
 
-app.get("/", async function (req, res) {
-  const products = await Product.find();
-  res.status(200).json({
-    status: "success",
-    data: products,
-  });
-});
-app.post("/", async function (req, res) {
-  const products = await Product.create(req.body);
-  res.status(201).json({
-    status: "success",
-    data: products,
-  });
-});
+app.set("view engine", "ejs");
+app.set("views", path.join("./views"));
+app.set("partials", path.join("./views/partials"));
 
-app.patch("/:id", async function (req, res) {
-  const products = await Product.findByIdAndUpdate(req.params.id, req.body);
+app.use("/products", productRoutes);
 
-  res.status(201).json({
-    status: "success",
-    data: products,
-  });
-});
-
-app.delete("/:id", async function (req, res) {
-  const products = await Product.findByIdAndDelete(req.params.id);
-  res.status(204).json({
-    status: "success",
-    data: products,
-  });
-});
+app.use(errorMiddleware);
 
 mongoose.connect(process.env.DB).then(() => {
   console.log("connected to Database");

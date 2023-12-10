@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Node JS</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link rel="icon" href="/images/home.png" type="image/x-icon" />
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body>
+    <%- include('partials/header.ejs') %>
+    <div class="container-fluid gap">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Product ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Description</th>
+            <th scope="col">Image</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <% products.forEach(product => { %>
+            <td><%= product._id %></td>
+            <td><%= product.name %></td>
+            <td><%= product.price %></td>
+            <td><%= product.description %></td>
+            <td>
+              <img
+                src="images/<%= product.image %>"
+                alt="Product A Image"
+                class="img-fluid"
+                style="max-width: 50px"
+              />
+            </td>
+            <td>
+              <button
+                id="<%= product._id %>"
+                type="button"
+                class="btn btn-danger delete-btn"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+          <%}); %>
+        </tbody>
+      </table>
+    </div>
+
+    <%- include('partials/footer.ejs') %>
+    <script>
+      src =
+        " https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js";
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        $(".delete-btn").on("click", function () {
+          // Get the product ID from the data-product-id attribute
+          var productId = $(this).attr("id");
+
+          // Send a DELETE request to the server
+          $.ajax({
+            url: "/products/" + productId,
+            type: "DELETE",
+            success: function (result) {
+              // Handle success (optional)
+              console.log("Product deleted successfully");
+              location.reload();
+              // Optionally, y;ou can update the UI or perform other actions
+            },
+            error: function (error) {
+              // Handle errors (optional)
+              console.error("Error deleting product", error);
+              // Optionally, you can display an error message or perform other actions
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
