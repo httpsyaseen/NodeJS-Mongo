@@ -24,11 +24,15 @@ app.set("view engine", "ejs");
 app.set("views", path.join("./views"));
 app.set("partials", path.join("./views/partials"));
 
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
 app.use("/products", productRoutes);
 
 app.use(errorMiddleware);
 
-mongoose.connect(process.env.DB).then(() => {
+mongoose.connect(process.env.DBLOCAL).then(() => {
   console.log("connected to Database");
 });
 

@@ -44,7 +44,7 @@
               <button
                 id="<%= product._id %>"
                 type="button"
-                class="btn btn-danger delete-btn"
+                class="btn btn-outline-danger delete-btn"
               >
                 Delete
               </button>
@@ -67,7 +67,7 @@
         $(".delete-btn").on("click", function () {
           // Get the product ID from the data-product-id attribute
           var productId = $(this).attr("id");
-
+          $(this).prop("disabled", true);
           // Send a DELETE request to the server
           $.ajax({
             url: "/products/" + productId,

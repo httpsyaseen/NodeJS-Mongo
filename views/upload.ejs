@@ -12,7 +12,12 @@
     <%- include('partials/header.ejs') %>
 
     <div class="product-upload">
-      <form action="/products" method="post" enctype="multipart/form-data">
+      <form
+        action="/products"
+        method="post"
+        enctype="multipart/form-data"
+        onsubmit="disableButton()"
+      >
         <label for="name">Product Name:</label>
         <input type="text" id="productName" name="name" required />
 
@@ -32,9 +37,19 @@
         <label for="photo">Product Photo:</label>
         <input type="file" id="photo" name="photo" accept="image/*" required />
 
-        <button type="submit">Submit</button>
+        <button type="submit" class="sumbit-js">Submit</button>
       </form>
     </div>
+
     <%- include('partials/footer.ejs') %>
   </body>
+  <script>
+    function disableButton() {
+      const submitButton = document.querySelector(".sumbit-js");
+      submitButton.disabled = true;
+      submitButton.innerText = "Posting..";
+
+      console.log(submitButton);
+    }
+  </script>
 </html>

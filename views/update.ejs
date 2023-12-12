@@ -47,7 +47,7 @@
               <!-- Add your update button here with a link to the update route -->
               <button
                 type="button"
-                class="btn btn-warning btn-sm"
+                class="btn btn-outline-warning btn-sm"
                 data-toggle="modal"
                 data-target="#updateModal"
                 onclick="updateModal('<%= product.name %>', '<%= product.price %>', '<%= product.description %>','<%= product._id %>')"
@@ -123,7 +123,7 @@
         </div>
       </div>
     </div>
-
+    <button type="button" class="btn btn-primary hehe-btn">Submit</button>
     <%- include('partials/footer.ejs') %>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -142,7 +142,14 @@
         url = `http://127.0.0.1:80/products/${productId}`;
       }
 
+      $(".hehe-btn").on("click", () => {
+        console.log("clicked");
+        $(".hehe-btn").prop("disabled", true);
+      });
+
       $(".sumbit-btn").on("click", () => {
+        console.log("clicked");
+        $(".sumbit-btn").prop("disabled", true);
         var name = $("#productName").val();
         var price = $("#productPrice").val();
         const Iprice = Number(price);
@@ -159,6 +166,8 @@
           formData.append("photo", photo);
         }
 
+        console.log(formData);
+
         $.ajax({
           url,
           method: "PATCH",
@@ -170,7 +179,7 @@
             location.reload();
           },
           error: function (error) {
-            console.error("Error making PATCH request:", error);
+            console.error("Error making PATCH request:", error.message);
           },
         });
       });
